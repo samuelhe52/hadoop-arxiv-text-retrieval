@@ -66,3 +66,15 @@ make backend-run-cluster
 - `scripts/assemble_arxiv_snapshot_dataset.py`：生成后端可直接读取的合并版 `upload.jsonl`，并同时保留按年份组织的本地 arXiv `cs.LG` 数据集
 - `scripts/cleanup_arxiv_dataset_primary_cs.py`：在已有数据集基础上进一步筛出 primary category 为 `cs.*` 的子集，并输出后端可直接读取的合并版 `upload.jsonl`
 - `scripts/preflight_arxiv_dataset.py`：在进入 Java 或 Hadoop 之前，先做 Python 版语料检查、2019 年以来的年度关键词和 TF-IDF 烟雾测试
+
+## 数据集准备
+
+安装 Python 3 和 `curl`，并确保磁盘空间足够容纳下载的原始快照和生成后的语料；然后在仓库根目录运行：
+
+```bash
+python3 scripts/assemble_arxiv_snapshot_dataset.py
+python3 scripts/cleanup_arxiv_dataset_primary_cs.py
+make dataset-preflight
+```
+
+第一条命令会下载 arXiv 元数据快照，并生成 `datasets/arxiv-cs-lg-2015-now`。第二条命令会生成后端默认使用的数据集：`datasets/arxiv-cs-lg-2015-now-primary-cs-only`。预检命令是可选但建议执行的步骤，用于在启动后端前检查生成后的语料。
