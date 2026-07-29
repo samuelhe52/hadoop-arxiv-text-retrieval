@@ -66,3 +66,15 @@ make backend-run-cluster
 - `scripts/assemble_arxiv_snapshot_dataset.py`: builds a local arXiv `cs.LG` dataset with a backend-ready merged `upload.jsonl` plus optional yearly shards
 - `scripts/cleanup_arxiv_dataset_primary_cs.py`: derives a stricter primary-`cs.*` subset and writes the backend-ready merged `upload.jsonl`
 - `scripts/preflight_arxiv_dataset.py`: runs Python-only corpus checks, yearly keywords since 2019, and TF-IDF smoke tests before any Java or Hadoop work
+
+## Dataset Preparation
+
+Install Python 3 and `curl`, ensure you have enough disk space for the downloaded source snapshot and generated corpus, then run from the repository root:
+
+```bash
+python3 scripts/assemble_arxiv_snapshot_dataset.py
+python3 scripts/cleanup_arxiv_dataset_primary_cs.py
+make dataset-preflight
+```
+
+The first command downloads the arXiv metadata snapshot and creates `datasets/arxiv-cs-lg-2015-now`. The second creates the dataset used by the backend by default at `datasets/arxiv-cs-lg-2015-now-primary-cs-only`. The preflight command is optional but recommended; it checks the generated corpus before running the backend.
